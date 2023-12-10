@@ -22,4 +22,8 @@ export class FeedsService {
     async delete(id: string): Promise<boolean> {
         return this.feedsRepository.delete(id);
     }
+
+    async get(id: string): Promise<Feed | undefined> {
+        return this.feedsRepository.get(id);
+    }
 }
