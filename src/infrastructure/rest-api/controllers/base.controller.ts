@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import type { ZodType } from 'zod';
-import BadRequestError from './errors/BadRequestError';
+import BadRequestError from '../errors/BadRequestError';
 
 export interface RequestValidationSchema {
     query?: ZodType<Request['query']>;

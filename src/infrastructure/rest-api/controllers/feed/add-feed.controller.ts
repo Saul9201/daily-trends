@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { FeedsService } from '../../../../application/feed.service';
-import BaseController, { RequestValidationSchema } from '../../base.controller';
+import BaseController, { RequestValidationSchema } from '../base.controller';
 import { z } from 'zod';
 
 const requestBodyValidator = z.object({

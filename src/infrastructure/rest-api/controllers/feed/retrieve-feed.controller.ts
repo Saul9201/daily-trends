@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { FeedsService } from '../../../../application/feed.service';
-import BaseController from '../../base.controller';
+import BaseController from '../base.controller';
   
 type RetrieveFeedRequest = Request<
     { id: string },
