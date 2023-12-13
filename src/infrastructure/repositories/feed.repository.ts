@@ -5,6 +5,22 @@ import MongoDbBaseRepository from './mongodb.base.repository';
 import { ListFilter } from '../../domain/feed.repository';
 
 
+const getMongoDbQuery = (filter?: ListFilter): mongoDB.Filter<Omit<Feed, 'id'>> => {
+    const query: any = {};
+    if (filter?.startDate) {
+        query.date = {
+            $gte: filter.startDate,
+        };
+    }
+    if (filter?.endDate) {
+        query.date = {
+            ...query.date,
+            $lt: filter.endDate,
+        };
+    }
+    return query;
+}
+
 export class MongoDBFeedRepository extends MongoDbBaseRepository<Omit<Feed, 'id'>> implements FeedRepository {
     constructor(mongoClient: mongoDB.MongoClient) {
         super(mongoClient, 'feeds');
@@ -28,20 +44,16 @@ export class MongoDBFeedRepository extends MongoDbBaseRepository<Omit<Feed, 'id'
             ...feed,
         };
     }
-    async list(filter: ListFilter): Promise<Feed[]> {
-        const res = await this.collection.find({
-            date: {
-                $gte: filter.startDate,
-                $lt: filter.endDate,
-            },
-        })
-            .skip(filter.offset || 0)
-            .limit(filter.limit || 10)
+    async list(filter?: ListFilter): Promise<Feed[]> {
+        const query = getMongoDbQuery(filter);
+        const res = await this.collection.find(query)
+            .skip(filter?.offset || 0)
+            .limit(filter?.limit || 10)
             .toArray();
 
-        return res.map(r => ({
-            ...r,
-            id: r._id.toHexString(),
+        return res.map(({_id, ...data}) => ({
+            id: _id.toHexString(),
+            ...data,
         }));
     }
 

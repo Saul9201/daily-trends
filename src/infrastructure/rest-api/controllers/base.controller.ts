@@ -3,9 +3,9 @@ import type { ZodType } from 'zod';
 import BadRequestError from '../errors/BadRequestError';
 
 export interface RequestValidationSchema {
-    query?: ZodType<Request['query']>;
-    params?: ZodType<Request['params']>;
-    body?: ZodType<Request['body']>;
+    query?: ZodType;
+    params?: ZodType;
+    body?: ZodType;
 }
 
 export async function handleValidation(

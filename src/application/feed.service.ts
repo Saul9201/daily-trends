@@ -11,7 +11,7 @@ export class FeedsService {
         return this.feedsRepository.add(feed);
     }
 
-    async list(filter: ListFilter): Promise<Feed[]> {
+    async list(filter?: ListFilter): Promise<Feed[]> {
         return this.feedsRepository.list(filter);
     }
 
