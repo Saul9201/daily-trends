@@ -1,4 +1,4 @@
-import * as mongoDB from "mongodb";
+import * as mongoDB from 'mongodb';
 
 export default abstract class MongoDbBaseRepository<T extends mongoDB.BSON.Document> {
     protected db: mongoDB.Db;

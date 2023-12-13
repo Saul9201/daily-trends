@@ -17,5 +17,4 @@ export const injectRouter = (app: express.Application) => {
     router.get('/', controllerHandler(container.resolve<ListFeedController>('listFeedController')));
     
     app.use('/feeds', router);
-}
-
+};

@@ -20,5 +20,5 @@ export default async function loadDependencies() {
         'deleteFeedController': asClass(DeleteFeedController),
         'updateFeedController': asClass(UpdateFeedController),
         'listFeedController': asClass(ListFeedController),
-    })
+    });
 }

@@ -1,12 +1,12 @@
 import { Feed } from '../../domain/feed.entity';
 import { FeedRepository } from '../../domain/feed.repository';
-import * as mongoDB from "mongodb";
+import * as mongoDB from 'mongodb';
 import MongoDbBaseRepository from './mongodb.base.repository';
 import { ListFilter } from '../../domain/feed.repository';
 
 
 const getMongoDbQuery = (filter?: ListFilter): mongoDB.Filter<Omit<Feed, 'id'>> => {
-    const query: any = {};
+    const query: Record<string, Record<string, unknown>> = {};
     if (filter?.startDate) {
         query.date = {
             $gte: filter.startDate,
@@ -19,7 +19,7 @@ const getMongoDbQuery = (filter?: ListFilter): mongoDB.Filter<Omit<Feed, 'id'>> 
         };
     }
     return query;
-}
+};
 
 export class MongoDBFeedRepository extends MongoDbBaseRepository<Omit<Feed, 'id'>> implements FeedRepository {
     constructor(mongoClient: mongoDB.MongoClient) {
@@ -40,7 +40,7 @@ export class MongoDBFeedRepository extends MongoDbBaseRepository<Omit<Feed, 'id'
         }
         const { _id, ...feed } = res;
         return {
-            id: res._id.toHexString(),
+            id: _id.toHexString(),
             ...feed,
         };
     }
