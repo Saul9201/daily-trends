@@ -13,4 +13,5 @@ export interface FeedRepository {
     list(filter?: ListFilter): Promise<Feed[]>;
     update(id: string, feed: Partial<Omit<Feed, 'id'>>): Promise<Feed | undefined>;
     delete(id: string): Promise<boolean>;
+    addIfNotExists(feeds: Feed[]): Promise<string[]>;
 }

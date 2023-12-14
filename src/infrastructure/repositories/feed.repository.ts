@@ -71,4 +71,21 @@ export class MongoDBFeedRepository extends MongoDbBaseRepository<Omit<Feed, 'id'
         });
         return result.deletedCount === 1;
     }
+    async addIfNotExists(feeds: Feed[]): Promise<string[]> {
+        const existingFeeds = await this.collection.find({
+            url: {
+                $in: feeds.map(feed => feed.url),
+            },
+        }).toArray();
+        const existingIds = existingFeeds.map(feed => feed._id.toHexString());
+        const feedsToInsert = feeds.filter(feed => !existingIds.includes(feed.id));  
+        if (feedsToInsert.length === 0) {
+            return [];
+        }
+        await this.collection.insertMany(feedsToInsert.map(({id, ...feedData}) => ({
+            _id: new mongoDB.ObjectId(id),
+            ...feedData
+        })));
+        return feedsToInsert.map((feed) => feed.id);
+    }
 }

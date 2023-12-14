@@ -26,4 +26,8 @@ export class FeedsService {
     async get(id: string): Promise<Feed | undefined> {
         return this.feedsRepository.get(id);
     }
+
+    async addIfNotExists(feeds: Feed[]): Promise<string[]> {
+        return this.feedsRepository.addIfNotExists(feeds);
+    }
 }

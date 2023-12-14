@@ -6,6 +6,7 @@ import RetrieveFeedController from './retrieve.controller';
 import DeleteFeedController from './delete.controller';
 import UpdateFeedController from './update.controller';
 import ListFeedController from './list.controller';
+import CrawlFeedController from './crawl.controller';
 
 export const injectRouter = (app: express.Application) => {
     const router = express.Router();
@@ -15,6 +16,7 @@ export const injectRouter = (app: express.Application) => {
     router.delete('/:id', controllerHandler(container.resolve<DeleteFeedController>('deleteFeedController')));
     router.patch('/:id', controllerHandler(container.resolve<UpdateFeedController>('updateFeedController')));
     router.get('/', controllerHandler(container.resolve<ListFeedController>('listFeedController')));
+    router.post('/crawl', controllerHandler(container.resolve<CrawlFeedController>('crawlFeedController')));
     
     app.use('/feeds', router);
 };
