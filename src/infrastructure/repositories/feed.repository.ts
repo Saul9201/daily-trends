@@ -5,8 +5,13 @@ import MongoDbBaseRepository from './mongodb.base.repository';
 import { ListFilter } from '../../domain/feed.repository';
 
 
+interface Query {
+    date?: Record<string, Date>;
+    [key: string]: unknown;
+}
+
 const getMongoDbQuery = (filter?: ListFilter): mongoDB.Filter<Omit<Feed, 'id'>> => {
-    const query: Record<string, Record<string, unknown>> = {};
+    let query: Query = {};
     if (filter?.startDate) {
         query.date = {
             $gte: filter.startDate,
@@ -17,6 +22,13 @@ const getMongoDbQuery = (filter?: ListFilter): mongoDB.Filter<Omit<Feed, 'id'>> 
             ...query.date,
             $lt: filter.endDate,
         };
+    }
+    if (filter?.match) {
+        query = {
+            ...query,
+            ...filter.match,
+        } as Query;
+        
     }
     return query;
 };

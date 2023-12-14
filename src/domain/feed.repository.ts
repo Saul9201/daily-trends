@@ -5,6 +5,7 @@ export interface ListFilter {
     offset?: number;
     startDate?: Date;
     endDate?: Date;
+    match?: Partial<Omit<Feed, 'id'>>;
 }
 
 export interface FeedRepository {

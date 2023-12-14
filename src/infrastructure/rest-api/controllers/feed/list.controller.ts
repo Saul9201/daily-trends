@@ -7,7 +7,10 @@ const queryValidation = z.object({
     limit: z.coerce.number().int().optional(),
     offset: z.coerce.number().int().optional(),
     startDate: z.coerce.date().optional(),
-    endDate: z.coerce.date().optional(), 
+    endDate: z.coerce.date().optional(),
+    match: z.object({
+        source: z.enum(['El País', 'El Mundo']),
+    }).optional(),
 });
   
 type ListFeedRequest = Request<
