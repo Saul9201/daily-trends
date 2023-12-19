@@ -2,7 +2,7 @@ import { Feed } from '../../domain/feed.entity';
 import { FeedRepository } from '../../domain/feed.repository';
 import * as mongoDB from 'mongodb';
 import MongoDbBaseRepository from './mongodb.base.repository';
-import { ListFilter } from '../../domain/feed.repository';
+import { ListFilter, ListOrder } from '../../domain/feed.repository';
 
 
 interface Query {
@@ -37,8 +37,9 @@ export class MongoDBFeedRepository extends MongoDbBaseRepository<Omit<Feed, 'id'
     constructor(mongoClient: mongoDB.MongoClient) {
         super(mongoClient, 'feeds');
     }
-    async add(feed: Omit<Feed, 'id'>): Promise<Feed> {
+    async add(feed: Omit<Feed, 'id'> & { id?: Feed['id']}): Promise<Feed> {
         const res = await this.collection.insertOne({
+            _id: new mongoDB.ObjectId(feed.id),
             ...feed,
         });
         return this.get(res.insertedId.toHexString()) as Promise<Feed>;
@@ -56,9 +57,10 @@ export class MongoDBFeedRepository extends MongoDbBaseRepository<Omit<Feed, 'id'
             ...feed,
         };
     }
-    async list(filter?: ListFilter): Promise<Feed[]> {
+    async list(filter?: ListFilter, order?: ListOrder): Promise<Feed[]> {
         const query = getMongoDbQuery(filter);
         const res = await this.collection.find(query)
+            .sort(Object.keys(order || {})[0] || 'date', Object.values(order || {})[0] || 'desc')
             .skip(filter?.offset || 0)
             .limit(filter?.limit || 10)
             .toArray();

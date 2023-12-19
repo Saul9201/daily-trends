@@ -1,13 +1,6 @@
 import FeedCrawler from '../domain/feed-crawler';
-import crypto from 'crypto';
 import { FeedsService } from './feed.service';
 import FeedModel from '../domain/feed.model';
-
-const generateIdFrom = (...params: string[]) => {
-    const seed = params.filter(item => Boolean(item)).map(item => String(item)).join('');
-    const id = crypto.createHash('md5').update(seed).digest('hex').slice(0, 24);
-    return id;
-};
 
 export class CrawlerService {
     constructor(
@@ -29,7 +22,7 @@ export class CrawlerService {
                     return acc;
                 }, new Map<string, FeedModel>())
                 .values()
-        ).map(feed => ({ ...feed, id: generateIdFrom(feed.url) }));
+        );
         await this.feedsService.addIfNotExists(feeds);
     }
 }
