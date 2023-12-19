@@ -1,18 +1,24 @@
 import {Feed} from '../domain/feed.entity';
-import {FeedRepository} from '../domain/feed.repository';
+import {FeedRepository, ListOrder} from '../domain/feed.repository';
 import { ListFilter } from '../domain/feed.repository';
+import { IdFactory } from '../domain/id.factory';
 
 export class FeedsService {
     constructor(
-        private feedsRepository: FeedRepository, 
+        private feedsRepository: FeedRepository,
+        private idFactory: IdFactory,
     ){} 
   
     async add(feed: Omit<Feed, 'id'>): Promise<Feed> {
-        return this.feedsRepository.add(feed);
+        const id = this.idFactory.generateId(feed.url);
+        return this.feedsRepository.add({
+            id,
+            ...feed
+        });
     }
 
-    async list(filter?: ListFilter): Promise<Feed[]> {
-        return this.feedsRepository.list(filter);
+    async list(filter?: ListFilter, order?: ListOrder): Promise<Feed[]> {
+        return this.feedsRepository.list(filter, order);
     }
 
     async update(id: string, feed: Partial<Omit<Feed, 'id'>>): Promise<Feed | undefined> {
@@ -27,7 +33,10 @@ export class FeedsService {
         return this.feedsRepository.get(id);
     }
 
-    async addIfNotExists(feeds: Feed[]): Promise<string[]> {
-        return this.feedsRepository.addIfNotExists(feeds);
+    async addIfNotExists(feeds: Omit<Feed, 'id'>[]): Promise<string[]> {
+        return this.feedsRepository.addIfNotExists(feeds.map(feed => ({
+            id: this.idFactory.generateId(feed.url),
+            ...feed,
+        })));
     }
 }

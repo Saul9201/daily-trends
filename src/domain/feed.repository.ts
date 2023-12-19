@@ -8,10 +8,14 @@ export interface ListFilter {
     match?: Partial<Omit<Feed, 'id'>>;
 }
 
+export type ListOrder = {
+    [P in keyof Feed]?: 'asc' | 'desc';
+};
+
 export interface FeedRepository {
-    add(feed: Omit<Feed, 'id'>): Promise<Feed>;
+    add(feed: Omit<Feed, 'id'> & { id?: Feed['id']}): Promise<Feed>;
     get(id: string): Promise<Feed | undefined>;
-    list(filter?: ListFilter): Promise<Feed[]>;
+    list(filter?: ListFilter, order?: ListOrder): Promise<Feed[]>;
     update(id: string, feed: Partial<Omit<Feed, 'id'>>): Promise<Feed | undefined>;
     delete(id: string): Promise<boolean>;
     addIfNotExists(feeds: Feed[]): Promise<string[]>;

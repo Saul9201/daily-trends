@@ -12,6 +12,7 @@ import getClient from './getMongoClient';
 import ElMundoCrawler from './crawlers/ElMundoCrawler';
 import ElPaisCrawler from './crawlers/ElPaisCrawler';
 import CrawlFeedController from './rest-api/controllers/feed/crawl.controller';
+import { MongoDBIdFactory } from './repositories/mongodb-id.factory';
 
 export default async function loadDependencies() {
     const mongoClient = await getClient();
@@ -27,7 +28,8 @@ export default async function loadDependencies() {
         'crawlerService': asClass(CrawlerService),
         'elMundoCrawler': asClass(ElMundoCrawler),
         'elPaisCrawler': asClass(ElPaisCrawler),
-        'crawlFeedController': asClass(CrawlFeedController)
+        'crawlFeedController': asClass(CrawlFeedController),
+        'idFactory': asClass(MongoDBIdFactory).singleton(),
     });
     container.register({
         'crawlers': asValue([

@@ -11,6 +11,9 @@ const queryValidation = z.object({
     match: z.object({
         source: z.enum(['El País', 'El Mundo']),
     }).optional(),
+    order: z.object({
+        date: z.enum(['asc', 'desc']),
+    }).optional(),
 });
   
 type ListFeedRequest = Request<
@@ -30,6 +33,6 @@ export default class ListFeedController extends BaseController {
         };
     }
     async execute(req: ListFeedRequest, res: Response): Promise<void> {
-        res.status(200).json(await this.feedsService.list(req.query));
+        res.status(200).json(await this.feedsService.list(req.query, req.query.order));
     }
 }

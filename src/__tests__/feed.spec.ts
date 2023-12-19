@@ -8,7 +8,7 @@ describe('Feed', () => {
     
     beforeAll(async () => {
         app = await boostrap();
-    });
+    }, 15000);
     
     afterAll(async () => {
         await Promise.all(createdFeeds.map((id) => request(app).delete(`/feeds/${id}`)));
@@ -69,7 +69,7 @@ describe('Feed', () => {
             const feedToUpdate = await request(app)
                 .post('/feeds')
                 .send({
-                    'url': 'https://elpais.com/tecnologia/2023-12-08/la-ue-aprueba-la-primera-ley-de-inteligencia-artificial-del-mundo.html',
+                    'url': 'https://elpais.com/tecnologia/2023-12-08/la-ue-aprueba-la-primera-ley-de-inteligencia-artificial-del-mundo-2.html',
                     'title': 'Esto es una prueba de titulo',
                     'content': 'Esto es una prueba de contenido',
                     'source': 'El País',
